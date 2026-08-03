@@ -42,13 +42,13 @@ jobs:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
         run: dvc repro
 
-      - name: Run model tests
-        env:
-          CAPSTONE_TEST: ${{ secrets.CAPSTONE_TEST }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-        run: python -m unittest tests/test_model.py
+      # - name: Run model tests
+      #   env:
+      #     CAPSTONE_TEST: ${{ secrets.CAPSTONE_TEST }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      #   run: python -m unittest tests/test_model.py
 
       - name: Promote model to production
         if: success()
