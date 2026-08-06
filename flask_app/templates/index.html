@@ -1,87 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentiment Analysis</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: none;
-            font-size: 16px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 22px;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .positive {
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-        }
-        .negative {
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentiment Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy-950: #0a1728;
+      --navy-900: #0e1f36;
+      --navy-800: #142a47;
+      --steel-400: #5b93c0;
+      --teal-400: #35c2a6;
+      --amber-500: #e0a03f;
+      --ink-050: #eef2f6;
+      --ink-300: #a9b8c9;
+      --ink-500: #7488a0;
+      --line: rgba(238, 242, 246, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--navy-950);
+      color: var(--ink-050);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: linear-gradient(180deg, var(--navy-900), var(--navy-800));
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 36px;
+      box-shadow: 0 20px 60px rgba(4, 10, 20, 0.45);
+    }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber-500);
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      margin: 0 0 8px;
+    }
+    p.sub {
+      color: var(--ink-300);
+      font-size: 14px;
+      margin: 0 0 24px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      background: var(--navy-950);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink-050);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 12px;
+      resize: vertical;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--steel-400);
+    }
+    button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #5b93c0, #3d75a3);
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:hover { filter: brightness(1.08); }
+    .result {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      text-align: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .result.positive { color: var(--teal-400); border-color: var(--teal-400); }
+    .result.negative { color: var(--amber-500); border-color: var(--amber-500); }
+  </style>
 </head>
 <body>
+  <div class="card">
+    <div class="eyebrow">sentiment model</div>
+    <h1>IMDB Review Sentiment Analysis</h1>
+    <p class="sub">Enter any text below and the model will predict whether the sentiment is positive or negative.</p>
 
-    <div class="container">
-        <h1>Sentiment Analysis</h1>
-        <form action="/predict" method="POST">
-            <label for="text">Write text:</label><br>
-            <textarea id="text" name="text" rows="5" placeholder="Enter your text here..."></textarea><br>
-            <button type="submit">Predict</button>
-        </form>
+    <form method="POST" action="/predict">
+      <textarea name="text" placeholder="Type or paste a review here..." required></textarea>
+      <button type="submit">Analyze Sentiment</button>
+    </form>
 
-        {% if result is not none %}
-            <div class="result {% if result == 1 %}positive{% else %}negative{% endif %}">
-                {% if result == 1 %}
-                    😊 Positive Sentiment
-                {% else %}
-                    😞 Negative Sentiment
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
-
+    {% if result is not none %}
+      {% if result == 1 %}
+        <div class="result positive">Positive Sentiment</div>
+      {% else %}
+        <div class="result negative">Negative Sentiment</div>
+      {% endif %}
+    {% endif %}
+  </div>
 </body>
 </html>

@@ -60,23 +60,23 @@ def normalize_text(text):
 
 # ------------------------------------------------------------------------------------------
 # LOCAL USE — active right now
-mlflow.set_tracking_uri('https://dagshub.com/MobiNomi/MlopsProject1.mlflow')
-dagshub.init(repo_owner='MobiNomi', repo_name='MlopsProject1', mlflow=True)
+# mlflow.set_tracking_uri('https://dagshub.com/MobiNomi/MlopsProject1.mlflow')
+# dagshub.init(repo_owner='MobiNomi', repo_name='MlopsProject1', mlflow=True)
 # ------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------------------
 # PRODUCTION USE — commented out, activate this when deploying via CI/CD
-# dagshub_token = os.getenv("CAPSTONE_TEST")
-# if not dagshub_token:
-#     raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
-#
-# os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-# os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
-#
-# dagshub_url = "https://dagshub.com"
-# repo_owner = "MobiNomi"
-# repo_name = "MlopsProject1"
-# mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
+dagshub_token = os.getenv("CAPSTONE_TEST")
+if not dagshub_token:
+    raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+
+dagshub_url = "https://dagshub.com"
+repo_owner = "MobiNomi"
+repo_name = "MlopsProject1"
+mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 # ------------------------------------------------------------------------------------------
 
 # Initialize Flask app
@@ -123,4 +123,4 @@ def predict():
     return render_template("index.html", result=prediction)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)  # Accessible from outside Docker
+    app.run(debug=False, host="0.0.0.0", port=5000)  # Accessible from outside Docker
